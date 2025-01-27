@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double Game - Case Opener Style</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #222;
+            color: white;
+            flex-direction: column;
+        }
+
+        .game-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .colors {
+            margin: 20px;
+            width: 600px;
+            height: 100px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            border: 2px solid white;
+            border-radius: 15px;
+        }
+
+        .color-track {
+            display: flex;
+            width: 100%;
+            position: absolute;
+            animation: moveColors 10s linear infinite; /* Animacja zapętlona */
+        }
+
+        .color-btn {
+            width: 15%;
+            height: 100px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .color-green {
+            background-color: green;
+        }
+
+        .color-red {
+            background-color: red;
+        }
+
+        .color-black {
+            background-color: black;
+        }
+
+        /* Linia wskazująca zwycięski kolor */
+        .indicator-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            background-color: white;
+            transform: translateX(-50%);
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #balance {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .input-container {
+            margin-top: 20px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 18px;
+            margin-right: 10px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #444;
+            color: white;
+        }
+
+        .bet-buttons {
+            margin-top: 20px;
+        }
+
+        .bet-buttons button {
+            padding: 10px;
+            margin: 5px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .bet-buttons button:hover {
+            background-color: #555;
+        }
+
+        /* Animacja przesuwania kolorów */
+        @keyframes moveColors {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%); /* Przesuwamy o 100%, aby kolory krążyły */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <h1>Double Game - Case Opener Style</h1>
+
+    <!-- Obstawianie koloru -->
+    <div class="bet-buttons">
+        <button onclick="placeBet('green')">Obstaw Zielony</button>
+        <button onclick="placeBet('red')">Obstaw Czerwony</button>
+        <button onclick="placeBet('black')">Obstaw Czarny</button>
+    </div>
+
+    <div class="input-container">
+        <input type="number" id="bet-amount" placeholder="Wpisz kwotę do postawienia" />
+    </div>
+
+    <!-- Koło z kolorami -->
+    <div class="colors">
+        <div id="color-track" class="color-track">
+            <!-- Dodajemy więcej kwadratów z kolorami -->
+            <div class="color-btn color-red"></div>
+            <div class="color-btn color-black"></div>
+            <div class="color-btn color-green"></div>
+            <div class="color-btn color-red"></div>
+            <div class="color-btn color-black"></div>
+            <div class="color-btn color-green"></div>
+            <div class="color-btn color-red"></div>
+            <div class="color-btn color-black"></div>
+            <div class="color-btn color-green"></div>
+            <div class="color-btn color-red"></div>
+            <div class="color-btn color-black"></div>
+            <div class="color-btn color-green"></div>
+            <!-- Można dodać więcej, aby kolory ciągle się kręciły -->
+        </div>
+        <!-- Linia wskazująca wygrany kolor -->
+        <div id="indicator" class="indicator-line"></div>
+    </div>
+
+    <!-- Przycisk do uruchomienia animacji -->
+    <button id="spin-button" class="button" onclick="spinWheel()">Obróć Koło</button>
+
+    <!-- Wynik -->
+    <div id="result"></div>
+
+    <!-- Saldo -->
+    <div id="balance">Saldo: 100</div>
+</div>
+
+<script>
+    let balance = 100;
+    let selectedColor = null;
+    let betAmount = 0;
+    let spinning = false;
+
+    // Funkcja wybierająca postawiony kolor
+    function placeBet(color) {
+        if (balance <= 0) {
+            return;
+        }
+        selectedColor = color;
+        document.getElementById("result").innerHTML = `Postawiłeś na: ${color}`;
+    }
+
+    // Funkcja ustawiająca kwotę zakładu
+    function setBetAmount() {
+        betAmount = parseInt(document.getElementById('bet-amount').value);
+        if (isNaN(betAmount) || betAmount <= 0 || betAmount > balance) {
+            return;
+        }
+    }
+
+    // Funkcja uruchamiająca animację koła
+    function spinWheel() {
+        if (spinning || !selectedColor) {
+            return;
+        }
+        spinning = true;
+        document.getElementById("spin-button").disabled = true;
+        setBetAmount();
+
+        // Rozpoczęcie animacji przesuwania kolorów
+        const track = document.getElementById("color-track");
+        track.style.transition = "none"; // Zresetowanie poprzednich animacji
+        track.style.transform = "translateX(0)"; // Resetowanie do początkowego stanu
+        setTimeout(() => {
+            track.style.transition = "transform 10s linear"; // Ustawienie nowej animacji
+            track.style.transform = "translateX(-100%)"; // Przesunięcie o 100%, aby kolory krążyły
+        }, 50); // Krótkie opóźnienie, by zmiana stylu została zauważona
+
+        // Opóźnienie przed zatrzymaniem animacji
+        setTimeout(stopWheel, 10000); // Po 10 sekundach zatrzymujemy koło
+    }
+
+    // Funkcja zatrzymująca animację i ustalająca wynik
+    function stopWheel() {
+        const random = Math.random(); // Losowanie
+        let resultColor;
+
+        // Określamy wynik na podstawie prawdopodobieństwa
+        if (random < 0.45) {
+            resultColor = 'red';
+        } else if (random < 0.85) {
+            resultColor = 'black';
+        } else {
+            resultColor = 'green';
+        }
+
+        // Sprawdzenie, czy postawiłeś na wybrany kolor
+        if (selectedColor === resultColor) {
+            balance += betAmount;
+            document.getElementById("result").innerHTML = `Zgadłeś! Kolor: ${resultColor}. Wygrana: ${betAmount}`;
+        } else {
+            balance -= betAmount;
+            document.getElementById("result").innerHTML = `Porażka! Kolor: ${resultColor}. Strata: ${betAmount}`;
+        }
+
+        // Ustawiamy nowe saldo
+        document.getElementById("balance").innerHTML = `Saldo: ${balance}`;
+
+        // Ustawienie linii wskazującej wygrany kolor
+        const indicator = document.getElementById("indicator");
+        if (resultColor === 'red') {
+            indicator.style.backgroundColor = 'red';
+        } else if (resultColor === 'black') {
+            indicator.style.backgroundColor = 'black';
+        } else {
+            indicator.style.backgroundColor = 'green';
+        }
+
+        // Kończymy animację
+        spinning = false;
+        document.getElementById("spin-button").disabled = false;
+    }
+</script>
+
+</body>
+</html>
