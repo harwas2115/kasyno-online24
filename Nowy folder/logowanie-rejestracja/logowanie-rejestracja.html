@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasyno24 - Logowanie i Rejestracja</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #cac70b, #9e2d2d);
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+        .form-container {
+            background-color: #222020;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .form-container h2 {
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        .form-container h2 span {
+            color: #ffffff;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #6610f2;
+            outline: none;
+            box-shadow: 0 0 5px rgba(102, 16, 242, 0.5);
+        }
+        .form-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background-color: #000000;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .form-btn:hover {
+            background-color: #ffffff;
+            transform: translateY(-3px);
+        }
+        .form-btn:active {
+            transform: translateY(0);
+        }
+        .footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #ffffff;
+        }
+        .footer a {
+            color: #6610f2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Login Form -->
+    <div class="form-container" id="login-form">
+        <h2>Logowanie do <span>Kasyno24</span></h2>
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label for="login-username">Nazwa użytkownika</label>
+                <input type="text" id="login-username" name="username" placeholder="Wpisz nazwę użytkownika" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Hasło</label>
+                <input type="password" id="login-password" name="password" placeholder="Wpisz swoje hasło" required>
+            </div>
+            <button type="submit" class="form-btn">Zaloguj się</button>
+        </form>
+        <div class="footer">
+            <p>Nie masz konta? <a href="javascript:void(0);" onclick="switchForm('register-form')">Zarejestruj się</a></p>
+        </div>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="form-container" id="register-form" style="display:none;">
+        <h2>Rejestracja w <span>Kasyno24</span></h2>
+        <form action="/register" method="POST">
+            <div class="form-group">
+                <label for="register-username">Nazwa użytkownika</label>
+                <input type="text" id="register-username" name="username" placeholder="Wybierz swoją nazwę użytkownika" required>
+            </div>
+            <div class="form-group">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email" name="email" placeholder="Wpisz swój email" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Hasło</label>
+                <input type="password" id="register-password" name="password" placeholder="Utwórz hasło" required>
+            </div>
+            <div class="form-group">
+                <label for="register-confirm-password">Potwierdź hasło</label>
+                <input type="password" id="register-confirm-password" name="confirm-password" placeholder="Potwierdź swoje hasło" required>
+            </div>
+            <button type="submit" class="form-btn">Zarejestruj się</button>
+        </form>
+        <div class="footer">
+            <p>Masz już konto? <a href="javascript:void(0);" onclick="switchForm('login-form')">Zaloguj się</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchForm(formId) {
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        if (formId === 'register-form') {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+        } else {
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>

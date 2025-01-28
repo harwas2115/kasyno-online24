@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <style>
+        body {
+            font-family: 'Titillium Web', sans-serif;
+            background: #191B28;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .roulette-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            width: 80%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .roulette-wrapper .selector {
+            width: 3px;
+            background: white;
+            left: 50%;
+            height: 100%;
+            transform: translate(-50%, 0%);
+            position: absolute;
+            z-index: 2;
+        }
+
+        .roulette-wrapper .wheel {
+            display: flex;
+        }
+
+        .roulette-wrapper .wheel .row {
+            display: flex;
+        }
+
+        .roulette-wrapper .wheel .row .card {
+            height: 75px;
+            width: 75px;
+            margin: 3px;
+            border-radius: 8px;
+            border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .card.red {
+            background: #F95146;
+        }
+
+        .card.black {
+            background: #2D3035;
+        }
+
+        .card.green {
+            background: #00C74D;
+        }
+
+        .betting-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .betting-container button,
+        .betting-container input {
+            margin: 5px;
+            padding: 10px 20px;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .betting-container button:hover,
+        .betting-container input:focus {
+            background: #333;
+            border-color: #FFD700;
+            outline: none;
+        }
+
+        .betting-container .redBet {
+            background-color: #F95146;
+        }
+
+        .betting-container .redBet:hover {
+            background-color: #e04134;
+        }
+
+        .betting-container .blackBet {
+            background-color: #2D3035;
+        }
+
+        .betting-container .blackBet:hover {
+            background-color: #24262a;
+        }
+
+        .betting-container .greenBet {
+            background-color: #00C74D;
+        }
+
+        .betting-container .greenBet:hover {
+            background-color: #00b73b;
+        }
+
+        .outcome {
+            color: #FFD700;
+            font-size: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .account-balance {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+            color: #FFD700;
+            border: 2px solid white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .quick-bet-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .quick-bet-buttons button {
+            background-color: #F95146;
+            border: 2px solid white;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .quick-bet-buttons button:hover {
+            background-color: #e04134;
+            border-color: #FFD700;
+        }
+
+        /* History of last 6 spins */
+        .history-container {
+            display: flex;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .history-card {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+            border: 2px solid #FFD700;
+        }
+
+        .history-card.red {
+            background: #F95146;
+        }
+
+        .history-card.black {
+            background: #2D3035;
+        }
+
+        .history-card.green {
+            background: #00C74D;
+        }
+    </style>
+    <title>Roulette Game</title>
+</head>
+<body>
+<div class="account-balance" id="accountBalance">Balance: 1000 zł</div>
+
+<div class="roulette-wrapper">
+    <div class="selector"></div>
+    <div class="wheel"></div>
+</div>
+
+<div class="betting-container">
+    <input placeholder="Amount to Bet" id="betAmount" type="number">
+    <button class="bet redBet">Bet on Red</button>
+    <button class="bet blackBet">Bet on Black</button>
+    <button class="bet greenBet">Bet on Green</button>
+</div>
+
+<div class="quick-bet-buttons">
+    <button class="quick-bet" data-amount="1">+1</button>
+    <button class="quick-bet" data-amount="10">+10</button>
+    <button class="quick-bet" data-amount="100">+100</button>
+    <button class="quick-bet" data-amount="1000">+1000</button>
+    <button class="quick-bet" data-amount="0.5">1/2</button>
+    <button class="quick-bet" data-amount="2">*2</button>
+    <button class="quick-bet" id="maxBet">Max</button>
+</div>
+
+<div class="outcome" id="outcome">Place your bet and spin the wheel!</div>
+
+<!-- History of Last 6 Spins -->
+<div class="history-container" id="history">
+    <div class="history-card"></div>
+    <div class="history-card"></div>
+    <div class="history-card"></div>
+    <div class="history-card"></div>
+    <div class="history-card"></div>
+    <div class="history-card"></div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        let accountBalance = 1000;
+        let history = []; // Store the history of spins
+
+        // Initialize the wheel
+        initWheel();
+
+        // Update balance display
+        function updateBalance() {
+            $('#accountBalance').text('Balance: ' + accountBalance + ' zł');
+        }
+
+        // Event listener for betting buttons
+        $('.bet').on('click', function() {
+            var betColor = $(this).attr('class').split(' ')[1].replace('Bet', '').toLowerCase();
+            var betAmount = parseInt($('#betAmount').val()) || 0;
+            if (betAmount <= 0) {
+                alert('Please enter a valid bet amount.');
+                return;
+            }
+            spinWheel(betColor, betAmount);
+        });
+
+        // Event listener for quick bet buttons
+        $('.quick-bet').on('click', function() {
+            var amount = $(this).data('amount');
+            var betAmount = $('#betAmount').val() ? parseInt($('#betAmount').val()) : 0;
+
+            if ($(this).attr('id') === 'maxBet') {
+                betAmount = accountBalance;
+            } else {
+                betAmount += amount;
+            }
+
+            $('#betAmount').val(betAmount);
+        });
+
+        function initWheel() {
+            var $wheel = $('.roulette-wrapper .wheel'),
+                row = "";
+
+            row += "<div class='row'>";
+            row += "  <div class='card red'>1</div>";
+            row += "  <div class='card black'>14</div>";
+            row += "  <div class='card red'>2</div>";
+            row += "  <div class='card black'>13</div>";
+            row += "  <div class='card red'>3</div>";
+            row += "  <div class='card black'>12</div>";
+            row += "  <div class='card red'>4</div>";
+            row += "  <div class='card green'>0</div>";
+            row += "  <div class='card black'>11</div>";
+            row += "  <div class='card red'>5</div>";
+            row += "  <div class='card black'>10</div>";
+            row += "  <div class='card red'>6</div>";
+            row += "  <div class='card black'>9</div>";
+            row += "  <div class='card red'>7</div>";
+            row += "  <div class='card black'>8</div>";
+            row += "</div>";
+
+            for (var x = 0; x < 29; x++) {
+                $wheel.append(row);
+            }
+        }
+
+        function spinWheel(betColor, betAmount) {
+            if (betAmount > accountBalance) {
+                alert('You do not have enough funds.');
+                return;
+            }
+            accountBalance -= betAmount;
+            updateBalance();
+
+            var $wheel = $('.roulette-wrapper .wheel'),
+                order = [0, 11, 5, 10, 6, 9, 7, 8, 1, 14, 2, 13, 3, 12, 4],
+                position = order[Math.floor(Math.random() * order.length)];
+
+            var rows = 12,
+                card = 75 + 3 * 2,
+                landingPosition = (rows * 15 * card) + (position * card);
+
+            var randomize = Math.floor(Math.random() * 75) - (75 / 2);
+
+            landingPosition = landingPosition + randomize;
+
+            var object = {
+                x: Math.floor(Math.random() * 50) / 100,
+                y: Math.floor(Math.random() * 20) / 100
+            };
+
+            $wheel.css({
+                'transition-timing-function': 'cubic-bezier(0,' + object.x + ',' + object.y + ',1)',
+                'transition-duration': '6s',
+                'transform': 'translate3d(-' + landingPosition + 'px, 0px, 0px)'
+            });
+
+            setTimeout(function() {
+                $wheel.css({
+                    'transition-timing-function': '',
+                    'transition-duration': '',
+                });
+
+                var resetTo = -(position * card + randomize);
+                $wheel.css('transform', 'translate3d(' + resetTo + 'px, 0px, 0px)');
+
+                var color;
+                if (position === 0) color = 'green';
+                else if (position % 2 === 0) color = 'red';
+                else color = 'black';
+
+                // Update history
+                updateHistory(color, position);
+
+                if (betColor === color) {
+                    $('#outcome').text('You win! ' + color.charAt(0).toUpperCase() + color.slice(1) + ' wins!');
+                    accountBalance += betAmount * 2;  // win double
+                    updateBalance();
+                } else {
+                    $('#outcome').text('You lose! ' + color.charAt(0).toUpperCase() + color.slice(1) + ' wins!');
+                }
+            }, 6000);
+        }
+
+        function updateHistory(color, number) {
+            history.unshift({ color: color, number: number });
+            if (history.length > 6) history.pop();
+
+            // Update the history display
+            $('#history').empty();
+            history.forEach(function(item) {
+                var historyCard = $('<div class="history-card"></div>');
+                historyCard.addClass(item.color);
+                historyCard.text(item.number);
+                $('#history').append(historyCard);
+            });
+        }
+    });
+</script>
+</body>
+</html>

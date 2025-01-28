@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sklep z Odznakami - Kasyno24</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1f1f1f;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem;
+            background-color: #222222;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 1.2rem;
+        }
+
+        /* Zakładki */
+        nav {
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #6610f2;
+        }
+
+        .shop-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2rem;
+            padding: 2rem;
+            margin: 0 5%;
+        }
+
+        .badge {
+            background-color: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .badge:hover {
+            transform: scale(1.05);
+        }
+
+        .badge img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .badge-info h3 {
+            margin-top: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .badge-info p {
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .buy-btn {
+            background-color: #6610f2;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .buy-btn:hover {
+            background-color: #5208c3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #222222;
+        }
+
+        /* Powiadomienie o zakupie */
+        .notification {
+            background-color: #28a745;
+            color: white;
+            padding: 1rem;
+            margin: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+            font-size: 1.2rem;
+        }
+
+        /* Responsywność */
+        @media (max-width: 1200px) {
+            .shop-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .shop-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .shop-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .shop-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Sklep z Odznakami</h1>
+    <p>Wybierz odznakę, którą chcesz kupić i użyj jej w grze!</p>
+</header>
+
+<!-- Zakładki -->
+<nav>
+    <a href="#sklep">Strona Główna</a>
+    <a href="#ekwipunek">Ekwipunek</a>
+    <a href="#konto">Twoje Konto</a>
+    <a href="#kontakt">Kontakt</a>
+</nav>
+
+<div class="shop-container" id="sklep">
+    <!-- Pierwszy rząd odznak -->
+    <div class="badge">
+        <img src="https://example.com/path-to-your-image-1.jpg" alt="Odznaka Mistrza Kasyna">
+        <div class="badge-info">
+            <h3>Odznaka Mistrza Kasyna</h3>
+            <p>Cena: 50 żetonów</p>
+            <button class="buy-btn" data-price="50" data-badge="Mistrza Kasyna">Kup teraz</button>
+        </div>
+    </div>
+
+    <div class="badge">
+        <img src="https://example.com/path-to-your-image-2.jpg" alt="Odznaka Króla Stolików">
+        <div class="badge-info">
+            <h3>Odznaka Króla Stolików</h3>
+            <p>Cena: 100 żetonów</p>
+            <button class="buy-btn" data-price="100" data-badge="Króla Stolików">Kup teraz</button>
+        </div>
+    </div>
+
+    <div class="badge">
+        <img src="https://example.com/path-to-your-image-3.jpg" alt="Odznaka Królowej Ruletki">
+        <div class="badge-info">
+            <h3>Odznaka Królowej Ruletki</h3>
+            <p>Cena: 200 żetonów</p>
+            <button class="buy-btn" data-price="200" data-badge="Królowej Ruletki">Kup teraz</button>
+        </div>
+    </div>
+
+    <div class="badge">
+        <img src="https://example.com/path-to-your-image-4.jpg" alt="Odznaka Weterana">
+        <div class="badge-info">
+            <h3>Odznaka Weterana</h3>
+            <p>Cena: 150 żetonów</p>
+            <button class="buy-btn" data-price="150" data-badge="Weterana">Kup teraz</button>
+        </div>
+    </div>
+
+    <div class="badge">
+        <img src="https://example.com/path-to-your-image-5.jpg" alt="Odznaka Czarnego Lwa">
+        <div class="badge-info">
+            <h3>Odznaka Czarnego Lwa</h3>
+            <p>Cena: 250 żetonów</p>
+            <button class="buy-btn" data-price="250" data-badge="Czarnego Lwa">Kup teraz</button>
+        </div>
+    </div>
+
+    <!-- Drugi rząd odznak -->
+    <div class="badge">
+        <img src="https://example.com/path-to-your-image-6.jpg" alt="Odznaka Potężnego Gracza">
+        <div class="badge-info">
+            <h3>Odznaka Potężnego Gracza</h3>
+            <p>Cena: 300 żetonów</p>
+            <button class="buy-btn" data-price="300" data-badge="Potężnego Gracza">Kup teraz</button>
+        </div>
+    </div>
+
+    <div class="badge">
+        <img src="https://example.com/path-to-your-image-7.jpg" alt="Odznaka Dżentelmena">
+        <div class="badge-info">
+            <h3>Odznaka Dżentelmena</h3>
+            <p>Cena: 400 żetonów</p>
+            <button class="buy-btn" data-price="400" data-badge="Dżentelmena">Kup teraz</button>
+        </div>
+    </div>
+
+    <div class="badge">
+        <img src="https://example.com/path-to-your-image-8.jpg" alt="Odznaka Kasynowego Mistrza">
+        <div class="badge-info">
+            <h3>Odznaka Kasynowego Mistrza</h3>
+            <p>Cena: 500 żetonów</p>
+            <button class="buy-btn" data-price="500" data-badge="Kasynowego Mistrza">Kup teraz</button>
+        </div>
+    </div>
+
+    <div class="badge">
+        <img src="https://example.com/path-to-your-image-9.jpg" alt="Odznaka Złotego Gracza">
+        <div class="badge-info">
+            <h3>Odznaka Złotego Gracza</h3>
+            <p>Cena: 600 żetonów</p>
+            <button class="buy-btn" data-price="600" data-badge="Złotego Gracza">Kup teraz</button>
+        </div>
+    </div>
+
+    <div class="badge">
+        <img src="https://example.com/path-to-your-image-10.jpg" alt="Odznaka Królewskiego Gracza">
+        <div class="badge-info">
+            <h3>Odznaka Królewskiego Gracza</h3>
+            <p>Cena: 700 żetonów</p>
+            <button class="buy-btn" data-price="700" data-badge="Królewskiego Gracza">Kup teraz</button>
+        </div>
+    </div>
+</div>
+
+<!-- Powiadomienie -->
+<div id="notification" class="notification">
+    Zakupiłeś odznakę!
+</div>
+
+<footer>
+    <p>&copy; 2025 Kasyno24. Wszystkie prawa zastrzeżone.</p>
+</footer>
+
+<script>
+    const buyButtons = document.querySelectorAll('.buy-btn');
+    const notification = document.getElementById('notification');
+
+    buyButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            notification.style.display = 'block';  // Pokaż powiadomienie
+            setTimeout(() => {
+                notification.style.display = 'none';  // Ukryj powiadomienie po 3 sekundach
+            }, 3000);
+        });
+    });
+</script>
+</body>
+</html>

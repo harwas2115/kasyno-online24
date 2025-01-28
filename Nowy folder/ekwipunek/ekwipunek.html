@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekwipunek - Kasyno24</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #212121;
+            color: #f4f4f4;
+        }
+        header {
+            background: #000;
+            color: #f1c40f;
+            padding: 1rem 2rem;
+            text-align: center;
+            border-bottom: 2px solid #f39c12;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        nav {
+            margin-top: 1rem;
+        }
+        nav a {
+            color: #f1c40f;
+            margin: 0 1rem;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #f39c12;
+        }
+        /* Stylizacja dla zakładek */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: #34495e;
+            border-top: 2px solid #f39c12;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .tab:hover {
+            background: #f39c12;
+            color: #000;
+        }
+        .tab.active {
+            background: #f39c12;
+            color: #000;
+        }
+        .tab-content {
+            padding: 2rem;
+            background: #2c3e50;
+            text-align: center;
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Profil */
+        .profile-info {
+            background: #34495e;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin: 1rem 0;
+            color: #e1e1e1;
+        }
+        .profile-info p {
+            font-size: 1.5rem;
+        }
+        /* Ekwipunek */
+        .inventory {
+            background: #34495e;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin: 1rem 0;
+        }
+        .inventory h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #f39c12;
+        }
+        .inventory .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: #2c3e50;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .inventory .item h4 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+        .inventory .item p {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #e1e1e1;
+        }
+        /* Historia */
+        .history {
+            background: #34495e;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin: 1rem 0;
+        }
+        .history h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #f39c12;
+        }
+        .history ul {
+            list-style: none;
+            padding: 0;
+        }
+        .history li {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Kasyno24 - Ekwipunek</h1>
+    <nav>
+        <a href="index.html">Strona Główna</a>
+        <a href="#fortune">Koło Fortuny</a>
+        <a href="#shop">Sklep</a>
+        <a href="#help">Pomoc</a>
+        <a href="#logout">Wyloguj</a>
+    </nav>
+</header>
+
+<!-- Zakładki -->
+<div class="tabs">
+    <div class="tab active" onclick="switchTab('profile')">Profil</div>
+    <div class="tab" onclick="switchTab('inventory')">Ekwipunek</div>
+    <div class="tab" onclick="switchTab('history')">Historia</div>
+</div>
+
+<!-- Zawartość zakładek -->
+<div id="profile" class="tab-content active">
+    <div class="profile-info">
+        <h2>Twój Profil</h2>
+        <p><strong>Saldo:</strong> 1000 zł</p>
+        <p><strong>Ranga:</strong> Gracz Złoty</p>
+    </div>
+</div>
+
+<div id="inventory" class="tab-content">
+    <div class="inventory">
+        <h3>Twoje przedmioty:</h3>
+        <div class="item">
+            <div>
+                <h4>Odznaka Zwycięzcy</h4>
+                <p>2 sztuki</p>
+            </div>
+            <button>Wykorzystaj</button>
+        </div>
+        <div class="item">
+            <div>
+                <h4>Bonus za Logowanie</h4>
+                <p>1 sztuka</p>
+            </div>
+            <button>Wykorzystaj</button>
+        </div>
+        <div class="item">
+            <div>
+                <h4>Super Koło Fortuny</h4>
+                <p>3 sztuki</p>
+            </div>
+            <button>Wykorzystaj</button>
+        </div>
+    </div>
+</div>
+
+<div id="history" class="tab-content">
+    <div class="history">
+        <h3>Historia Transakcji</h3>
+        <ul>
+            <li>Dodano 1000 zł - 26 stycznia 2025</li>
+            <li>Wydano 50 zł na Koło Fortuny - 25 stycznia 2025</li>
+            <li>Dodano 500 zł - 24 stycznia 2025</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Skrypt do przełączania zakładek -->
+<script>
+    function switchTab(tabName) {
+        // Ukryj wszystkie zakładki
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Usuń klasę "active" z wszystkich zakładek
+        const tabLinks = document.querySelectorAll('.tab');
+        tabLinks.forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Pokaż wybraną zakładkę
+        document.getElementById(tabName).classList.add('active');
+
+        // Ustaw aktywną zakładkę
+        const activeTab = document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`);
+        activeTab.classList.add('active');
+    }
+</script>
+
+</body>
+</html>

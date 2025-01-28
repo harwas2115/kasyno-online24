@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koło Fortuny - Kasyno24</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222020;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #f7b600;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        #fortuneWheel {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: conic-gradient(
+                    #f7b600 0deg 60deg,
+                    #222020 60deg 120deg,
+                    #f7b600 120deg 180deg,
+                    #222020 180deg 240deg,
+                    #f7b600 240deg 300deg,
+                    #222020 300deg 360deg
+            );
+            position: relative;
+            margin: 20px auto;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            transition: transform 4s ease-out;
+        }
+
+        .wheel-segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: transparent;
+            transform-origin: 100% 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .wheel-segment.gold span {
+            color: #ffd700;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .wheel-segment.black span {
+            color: #ff4500;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .wheel-button {
+            background-color: #f7b600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .wheel-button:hover {
+            background-color: #ff5733;
+        }
+
+        .disabled {
+            background-color: #7f7f7f;
+            cursor: not-allowed;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #f7b600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #f7b600;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: #f7b600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        #arrow {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            margin-left: -10px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid #f7b600;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            color: #f7b600;
+            margin-top: 20px;
+        }
+
+        .home-button {
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .home-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Koło Fortuny</h1>
+
+    <div id="arrow"></div>
+
+    <div id="fortuneWheel">
+        <div class="wheel-segment gold" style="transform: rotate(0deg);">
+            <span>30 zł</span>
+        </div>
+        <div class="wheel-segment black" style="transform: rotate(60deg);">
+            <span>50 zł</span>
+        </div>
+        <div class="wheel-segment gold" style="transform: rotate(120deg);">
+            <span>80 zł</span>
+        </div>
+        <div class="wheel-segment black" style="transform: rotate(180deg);">
+            <span>100 zł</span>
+        </div>
+        <div class="wheel-segment gold" style="transform: rotate(240deg);">
+            <span>250 zł</span>
+        </div>
+        <div class="wheel-segment black" style="transform: rotate(300deg);">
+            <span>30 zł</span>
+        </div>
+    </div>
+
+    <button class="wheel-button" id="spinButton" onclick="spinWheel()">Zakręć Kołem</button>
+
+    <div id="result"></div>
+    <div class="timer" id="timer"></div>
+
+    <!-- Powrót do strony głównej -->
+    <button class="home-button" onclick="window.location.href='index.html'">Powrót do strony głównej</button>
+</div>
+
+<footer>
+    <p>© 2025 Kasyno24. Wszystkie prawa zastrzeżone.</p>
+    <p><a href="#">Regulamin</a> | <a href="#">Polityka prywatności</a></p>
+</footer>
+
+<script>
+    const spinButton = document.getElementById('spinButton');
+    const lastSpinTime = localStorage.getItem('lastSpinTime');
+    const currentTime = new Date().getTime();
+    const threeHours = 3 * 60 * 60 * 1000; // 3 godziny w milisekundach
+    const timerElement = document.getElementById('timer');
+
+    function checkSpinAvailability() {
+        if (lastSpinTime && currentTime - lastSpinTime < threeHours) {
+            const timeRemaining = Math.floor((threeHours - (currentTime - lastSpinTime)) / 1000);
+            const minutesRemaining = Math.floor(timeRemaining / 60);
+            const secondsRemaining = timeRemaining % 60;
+            spinButton.classList.add('disabled');
+            spinButton.disabled = true;
+            spinButton.innerText = `Spróbuj za ${minutesRemaining}m ${secondsRemaining}s`;
+            timerElement.innerText = `Pozostały czas: ${minutesRemaining}m ${secondsRemaining}s`;
+        } else {
+            spinButton.classList.remove('disabled');
+            spinButton.disabled = false;
+            spinButton.innerText = 'Zakręć Kołem';
+            timerElement.innerText = '';
+        }
+    }
+
+    function spinWheel() {
+        localStorage.setItem('lastSpinTime', new Date().getTime());
+
+        const wheel = document.getElementById('fortuneWheel');
+        wheel.style.transition = 'transform 4s ease-out';
+        const randomDegree = Math.floor(Math.random() * 360) + 3600;
+        wheel.style.transform = `rotate(${randomDegree}deg)`;
+
+        setTimeout(() => {
+            const resultText = getPrize(randomDegree % 360);
+            document.getElementById('result').innerText = `Wygrałeś: ${resultText}`;
+            checkSpinAvailability();
+        }, 4000);
+    }
+
+    function getPrize(degree) {
+        if (degree < 60) {
+            return '30 zł';
+        } else if (degree < 120) {
+            return '50 zł';
+        } else if (degree < 180) {
+            return '80 zł';
+        } else if (degree < 240) {
+            return '100 zł';
+        } else if (degree < 300) {
+            return '250 zł';
+        } else {
+            return '30 zł';
+        }
+    }
+
+    checkSpinAvailability();
+</script>
+
+</body>
+</html>

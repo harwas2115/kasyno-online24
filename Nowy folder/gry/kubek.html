@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gadanie Kubków z Nagrodą</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .game-container {
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        .game-container h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        .input-container input {
+            padding: 10px;
+            font-size: 18px;
+            margin-right: 10px;
+            width: 180px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-container button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .input-container button:hover {
+            background-color: #27ae60;
+        }
+        .cups {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+            width: 450px; /* Szerokość kontenera, aby zachować odpowiedni odstęp między kubkami */
+        }
+        .cup {
+            width: 100px;
+            height: 150px;
+            background-color: #3498db;
+            border-radius: 10px;
+            margin: 0 20px;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+        }
+        .button {
+            background-color: #2ecc71;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            border-radius: 5px;
+            width: 200px;
+        }
+        .button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .reward {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+            display: none;
+        }
+        .cup.show-reward .reward {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <h1>Zgadnij, pod którym kubkiem jest nagroda!</h1>
+    <div class="input-container">
+        <input type="number" id="amountInput" placeholder="Wpisz kwotę do gry" />
+        <button class="button" id="setAmountButton">Ustaw kwotę</button>
+    </div>
+
+    <div class="cups">
+        <div class="cup" id="cup1"><span class="reward" id="reward1"></span></div>
+        <div class="cup" id="cup2"><span class="reward" id="reward2"></span></div>
+        <div class="cup" id="cup3"><span class="reward" id="reward3"></span></div>
+    </div>
+
+    <button class="button" id="playButton" disabled>Losuj kubki</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    const playButton = document.getElementById("playButton");
+    const resultDiv = document.getElementById("result");
+    const cups = document.querySelectorAll(".cup");
+    const setAmountButton = document.getElementById("setAmountButton");
+    const amountInput = document.getElementById("amountInput");
+
+    let selectedAmount = 0;
+    let correctCupIndex = null;
+    let reward = null;
+    let shuffledCups = [];
+    let isGameInProgress = false;
+
+    // Funkcja do ustawiania kwoty
+    setAmountButton.addEventListener("click", () => {
+        selectedAmount = parseInt(amountInput.value);
+
+        if (isNaN(selectedAmount) || selectedAmount <= 0) {
+            resultDiv.textContent = "Proszę wpisać prawidłową kwotę.";
+            return;
+        }
+
+        resultDiv.textContent = `Kwota ustawiona: ${selectedAmount} zł`;
+        playButton.disabled = false; // Aktywowanie przycisku losowania
+    });
+
+    // Funkcja do rozpoczęcia gry
+    playButton.addEventListener("click", () => {
+        // Resetowanie wyników
+        resultDiv.textContent = "";
+        cups.forEach(cup => {
+            cup.classList.remove("show-reward");
+            const rewardSpan = cup.querySelector(".reward");
+            rewardSpan.textContent = ''; // Czyszczenie tekstu nagrody
+        });
+
+        // Wybór nagrody i kubka
+        correctCupIndex = Math.floor(Math.random() * 3); // Wybieramy losowy kubek, który będzie miał nagrodę
+        reward = selectedAmount * 2; // Nagroda pomnożona przez 2
+
+        // Przydzielanie nagrody do kubków
+        cups[correctCupIndex].querySelector(".reward").textContent = `${reward} zł`;
+
+        // Losowanie i przemieszczanie kubków
+        shuffledCups = [0, 1, 2];
+        shuffledCups.sort(() => Math.random() - 0.5); // Losowanie kolejności kubków
+
+        // Animacja tasowania kubków
+        let positions = [-150, 0, 150]; // Kubki zaczynają w trzech różnych pozycjach
+        cups.forEach((cup, index) => {
+            const position = positions[shuffledCups[index]];
+            cup.style.transform = `translateX(${position}px)`; // Ustawianie pozycji kubków na początku
+        });
+
+        // Przemieszczanie kubków przez 5 sekund
+        cups.forEach((cup, index) => {
+            cup.style.transition = "transform 5s ease-in-out"; // Czas animacji na 5 sekund
+            const randomPosition = Math.floor(Math.random() * 3) * 150 - 150; // Losowanie pozycji
+            setTimeout(() => {
+                cup.style.transform = `translateX(${randomPosition}px)`; // Tasowanie kubków
+            }, 0);
+        });
+
+        resultDiv.textContent = "Wybierz kubek!";
+
+        // Zezwolenie na wybór kubka po zakończeniu animacji tasowania
+        isGameInProgress = true;
+        setTimeout(() => {
+            cups.forEach((cup, index) => {
+                cup.addEventListener("click", () => {
+                    if (!isGameInProgress) return; // Zapobieganie kolejnym kliknięciom
+
+                    cup.classList.add("show-reward");
+
+                    if (index === correctCupIndex) {
+                        resultDiv.textContent = `Gratulacje! Trafiłeś! Nagroda: ${reward} zł.`;
+                    } else {
+                        resultDiv.textContent = "Niestety, spróbuj ponownie!";
+                    }
+
+                    // Zablokowanie dalszego klikania
+                    isGameInProgress = false;
+                });
+            });
+        }, 5000); // Po zakończeniu animacji zezwolenie na wybór
+    });
+</script>
+</body>
+</html>
