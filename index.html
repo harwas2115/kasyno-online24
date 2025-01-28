@@ -3,393 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Double Game - Case Opener Style</title>
+    <title>Gra Ping Pong</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #222;
-            color: white;
-            flex-direction: column;
-            overflow: hidden;
+            background-color: #000;
         }
-
-        .game-container {
-            text-align: center;
-            width: 100%;
-            max-width: 900px;
-        }
-
-        h1 {
-            font-size: 36px;
-            margin-bottom: 30px;
-        }
-
-        .button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
-            border-radius: 5px;
-        }
-
-        .button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .colors {
-            margin: 20px 0;
-            width: 100%;
-            height: 140px;
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            border: 2px solid white;
-            border-radius: 15px;
-            overflow: hidden;
-        }
-
-        .color-track {
-            display: flex;
-            width: 200%;
-            position: absolute;
-            transform: translateX(0);
-        }
-
-        .color-btn {
-            flex: 1;
-            height: 140px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            opacity: 1;
-            border: 2px solid #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            color: #fff;
-        }
-
-        .color-green {
-            background-color: green;
-        }
-
-        .color-red {
-            background-color: red;
-        }
-
-        .color-black {
-            background-color: black;
-        }
-
-        .indicator-line {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 3px;
-            background-color: white;
-            transform: translateX(-50%);
-        }
-
-        #result {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        #balance {
-            margin-top: 20px;
-            font-size: 18px;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        .input-container {
-            margin-top: 20px;
-        }
-
-        input {
-            padding: 10px;
-            font-size: 18px;
-            margin-right: 10px;
-            border: 2px solid #333;
-            border-radius: 5px;
-            background-color: #444;
-            color: white;
-        }
-
-        .bet-buttons {
-            margin-top: 20px;
-        }
-
-        .bet-buttons button {
-            padding: 8px 16px;
-            margin: 5px;
-            background-color: #333;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .bet-buttons button:hover {
-            background-color: #555;
-        }
-
-        .selected {
-            border: 4px solid yellow;
-            opacity: 0.9;
-        }
-
-        @keyframes moveColors {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        .bet-modifiers {
-            margin-top: 20px;
-        }
-
-        .bet-modifiers button {
-            padding: 8px 16px;
-            margin: 5px;
-            background-color: #333;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .bet-modifiers button:hover {
-            background-color: #555;
-        }
-
-        /* Style dla przycisków zakładów */
-        .bet-colors {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .bet-colors button {
-            padding: 12px 24px;
-            font-size: 16px;
-            width: 30%;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .bet-colors .color-green {
-            background-color: green;
-            color: white;
-        }
-
-        .bet-colors .color-red {
-            background-color: red;
-            color: white;
-        }
-
-        .bet-colors .color-black {
-            background-color: black;
-            color: white;
-        }
-
-        /* Custom style for bet modifier buttons */
-        .bet-modifiers button {
-            padding: 12px 24px;
-            margin: 5px;
-            background-color: #28a745;
-            color: white;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        .bet-modifiers button:hover {
-            background-color: #218838;
-        }
-
-        /* Adjusting the layout of the game interface */
-        .input-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .input-container input {
-            width: 200px;
-            margin-right: 10px;
-        }
-
-        /* Adjust layout for bet buttons */
-        .bet-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        /* Różowy motyw dla przycisków betowania */
-        .bet-modifiers button,
-        .bet-buttons button {
-            background-color: #D5008F; /* Różowy kolor */
-        }
-
-        .bet-modifiers button:hover,
-        .bet-buttons button:hover {
-            background-color: #C4007D; /* Ciemniejszy różowy */
-        }
-
-        /* Zielony motyw dla przycisku "Aktualny zakład" */
-        #bet-0 {
-            background-color: green;
-        }
-
-        #bet-0:hover {
-            background-color: darkgreen;
+        canvas {
+            border: 2px solid #fff;
         }
     </style>
 </head>
 <body>
-
-<div class="game-container">
-    <h1>Double Game - Case Opener Style</h1>
-
-    <!-- Plansza z grą -->
-    <div class="colors">
-        <div id="color-track" class="color-track">
-            <div class="color-btn color-red">0</div>
-            <div class="color-btn color-black">1</div>
-            <div class="color-btn color-green">2</div>
-            <div class="color-btn color-red">3</div>
-            <div class="color-btn color-black">4</div>
-            <div class="color-btn color-green">5</div>
-            <div class="color-btn color-red">6</div>
-            <div class="color-btn color-black">7</div>
-            <div class="color-btn color-green">8</div>
-            <div class="color-btn color-red">9</div>
-            <div class="color-btn color-black">10</div>
-            <div class="color-btn color-green">11</div>
-            <div class="color-btn color-red">12</div>
-            <div class="color-btn color-black">13</div>
-            <div class="color-btn color-green">14</div>
-        </div>
-        <div id="indicator" class="indicator-line"></div>
-    </div>
-
-    <div class="input-container">
-        <input type="number" id="bet-amount" placeholder="Wpisz kwotę do postawienia" />
-    </div>
-
-    <div class="bet-buttons">
-        <button id="bet-0" onclick="setBet(0)">Aktualny zakład</button>
-        <button id="bet-1" onclick="setBet(1)">+1</button>
-        <button id="bet-10" onclick="setBet(10)">+10</button>
-        <button id="bet-100" onclick="setBet(100)">+100</button>
-        <button id="bet-1000" onclick="setBet(1000)">+1000</button>
-        <button id="bet-half" onclick="setBetHalf()">1/2</button>
-        <button id="bet-double" onclick="setBetDouble()">x2</button>
-        <button id="bet-max" onclick="setBetMax()">max</button>
-    </div>
-
-    <div id="result"></div>
-    <div id="balance">Saldo: 100 zł</div>
-
-    <div class="game-controls">
-        <!-- Kolory do obstawiania -->
-        <div class="bet-colors">
-            <button id="green-btn" onclick="placeBet('green')" class="color-green">Obstaw Zielony</button>
-            <button id="red-btn" onclick="placeBet('red')" class="color-red">Obstaw Czerwony</button>
-            <button id="black-btn" onclick="placeBet('black')" class="color-black">Obstaw Czarny</button>
-        </div>
-    </div>
-
-    <button id="spin-button" class="button" onclick="spinWheel()">Obróć Koło</button>
-
-</div>
-
+<canvas id="gameCanvas" width="800" height="400"></canvas>
 <script>
-    let balance = 100;
-    let selectedColor = null;
-    let betAmount = 0;
-    let spinning = false;
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-    function placeBet(color) {
-        if (balance <= 0) {
-            return;
-        }
-        selectedColor = color;
-        document.getElementById("result").innerHTML = `Postawiłeś na kolor: ${color}`;
+    const paddleWidth = 10, paddleHeight = 100;
+    const ballSize = 10;
+    let leftPaddleY = (canvas.height - paddleHeight) / 2;
+    let rightPaddleY = (canvas.height - paddleHeight) / 2;
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = 5;
+    let ballSpeedY = 5;
+    let leftPaddleSpeed = 0;
+    let rightPaddleSpeed = 0;
 
-        // Usunięcie klasy 'selected' z innych przycisków
-        document.getElementById("green-btn").classList.remove("selected");
-        document.getElementById("red-btn").classList.remove("selected");
-        document.getElementById("black-btn").classList.remove("selected");
-
-        // Dodanie klasy 'selected' do wybranego koloru
-        document.getElementById(`${color}-btn`).classList.add("selected");
+    function drawPaddles() {
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
+        ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
     }
 
-    function setBet(amount) {
-        betAmount = amount;
-        document.getElementById("bet-amount").value = betAmount;
+    function drawBall() {
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(ballX - ballSize / 2, ballY - ballSize / 2, ballSize, ballSize);
     }
 
-    function setBetHalf() {
-        betAmount = Math.floor(balance / 2);
-        document.getElementById("bet-amount").value = betAmount;
-    }
+    function moveBall() {
+        ballX += ballSpeedX;
+        ballY += ballSpeedY;
 
-    function setBetDouble() {
-        betAmount = balance * 2;
-        document.getElementById("bet-amount").value = betAmount;
-    }
-
-    function setBetMax() {
-        betAmount = balance;
-        document.getElementById("bet-amount").value = betAmount;
-    }
-
-    function spinWheel() {
-        if (!selectedColor || betAmount <= 0) {
-            return;
+        if (ballY - ballSize / 2 <= 0 || ballY + ballSize / 2 >= canvas.height) {
+            ballSpeedY = -ballSpeedY;
         }
 
-        let win = Math.random() < 0.5; // Prostota losowania
-
-        // Zaktualizowanie wyniku
-        if (win && selectedColor === 'green') {
-            balance += betAmount;
-            document.getElementById("result").innerHTML = `Wygrałeś! Nowe saldo: ${balance} zł`;
-        } else if (win && selectedColor === 'red') {
-            balance += betAmount;
-            document.getElementById("result").innerHTML = `Wygrałeś! Nowe saldo: ${balance} zł`;
-        } else if (win && selectedColor === 'black') {
-            balance += betAmount;
-            document.getElementById("result").innerHTML = `Wygrałeś! Nowe saldo: ${balance} zł`;
-        } else {
-            balance -= betAmount;
-            document.getElementById("result").innerHTML = `Przegrałeś! Nowe saldo: ${balance} zł`;
+        if (ballX - ballSize / 2 <= paddleWidth && ballY >= leftPaddleY && ballY <= leftPaddleY + paddleHeight ||
+            ballX + ballSize / 2 >= canvas.width - paddleWidth && ballY >= rightPaddleY && ballY <= rightPaddleY + paddleHeight) {
+            ballSpeedX = -ballSpeedX;
         }
 
-        document.getElementById("balance").innerHTML = `Saldo: ${balance} zł`;
+        if (ballX - ballSize / 2 <= 0 || ballX + ballSize / 2 >= canvas.width) {
+            ballX = canvas.width / 2;
+            ballY = canvas.height / 2;
+            ballSpeedX = -ballSpeedX;
+        }
     }
+
+    function movePaddles() {
+        leftPaddleY += leftPaddleSpeed;
+        rightPaddleY += rightPaddleSpeed;
+
+        if (leftPaddleY < 0) leftPaddleY = 0;
+        if (leftPaddleY + paddleHeight > canvas.height) leftPaddleY = canvas.height - paddleHeight;
+        if (rightPaddleY < 0) rightPaddleY = 0;
+        if (rightPaddleY + paddleHeight > canvas.height) rightPaddleY = canvas.height - paddleHeight;
+    }
+
+    function gameLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawPaddles();
+        drawBall();
+        moveBall();
+        movePaddles();
+        requestAnimationFrame(gameLoop);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp') rightPaddleSpeed = -5;
+        if (e.key === 'ArrowDown') rightPaddleSpeed = 5;
+        if (e.key === 'w') leftPaddleSpeed = -5;
+        if (e.key === 's') leftPaddleSpeed = 5;
+    });
+
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') rightPaddleSpeed = 0;
+        if (e.key === 'w' || e.key === 's') leftPaddleSpeed = 0;
+    });
+
+    gameLoop();
 </script>
 </body>
 </html>
